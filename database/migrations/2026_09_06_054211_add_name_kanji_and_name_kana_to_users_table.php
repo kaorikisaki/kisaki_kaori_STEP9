@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->string('name_kanji')->after('name'); // nameの後ろに追加
             $table->string('name_kana')->after('name_kanji'); // name_kanjiの後ろに追加
+            $table->unsignedBigInteger('company_id')->nullable()->after('password'); // company_idを追加
         });
     }
 
@@ -23,7 +24,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['name_kanji', 'name_kana']);
+            $table->dropColumn(['name_kanji', 'name_kana', 'company_id']);
         });
     }
 };

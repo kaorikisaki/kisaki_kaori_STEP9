@@ -57,11 +57,12 @@
                         </div>
 
                         <!-- 名前（カナ） -->
-                        <div class="mb-5 flex items-center">
-                            <label class="w-44 text-right pr-8 text-sm text-gray-700 flex-shrink-0" for="name_kana">名前（カナ）</label>
-                            <input class="flex-1 px-3 py-2 border rounded text-sm focus:outline-none focus:ring focus:border-blue-300" 
-                            f        type="text" id="name_kana" name="name_kana" value="{{ old('name_kana') }}" required>
-                        </div>
+                        <!-- 名前（カナ） -->
+        <div class="mb-5 flex items-center">
+            <label class="w-44 text-right pr-8 text-sm text-gray-700 flex-shrink-0" for="name_kana">名前（カナ）</label>
+            <input class="flex-1 px-3 py-2 border rounded text-sm focus:outline-none focus:ring focus:border-blue-300" 
+                    type="text" id="name_kana" name="name_kana" value="{{ old('name_kana') }}" required>
+        </div>
 
                         <!-- Email Address -->
                         <div class="mb-5 flex items-center">
