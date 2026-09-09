@@ -15,7 +15,7 @@
 
         <!-- アカウント編集ボタン -->
         <div class="mb-6">
-            <a href="#" class="bg-blue-600 text-white text-sm px-4 py-2 rounded hover:bg-blue-700 transition">
+            <a href="{{ route('mypage.edit') }}" class="bg-blue-600 text-white text-sm px-4 py-2 rounded hover:bg-blue-700 transition">
                 アカウント編集
             </a>
         </div>

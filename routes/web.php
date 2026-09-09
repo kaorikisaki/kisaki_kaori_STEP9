@@ -21,5 +21,11 @@ Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->na
 // ユーザー登録処理の実行
 Route::post('/register', [RegisterController::class, 'register']);
 
-// ▼ 追加：マイページ画面の表示（ログイン必須）
+// マイページ画面の表示（ログイン必須）
 Route::get('/mypage', [MypageController::class, 'index'])->middleware('auth')->name('mypage');
+
+// アカウント編集画面の表示
+Route::get('/mypage/edit', [MypageController::class, 'edit'])->middleware('auth')->name('mypage.edit');
+
+// アカウント情報の更新処理
+Route::patch('/mypage/update', [MypageController::class, 'update'])->middleware('auth')->name('mypage.update');

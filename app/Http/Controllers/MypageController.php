@@ -22,4 +22,29 @@ class MypageController extends Controller
         // ビューにユーザー情報と商品データを一緒に渡す
         return view('mypage', compact('user', 'products'));
     }
+
+    /**
+     * アカウント編集画面を表示する
+     */
+    public function edit()
+    {
+        $user = Auth::user();
+        return view('edit', compact('user'));
+    }
+
+    /**
+     * アカウント情報を更新する
+     */
+    public function update(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . Auth::id()],
+        ]);
+
+        $user = Auth::user();
+        $user->update($validated);
+
+        return redirect()->route('mypage')->with('success', 'アカウント情報を更新しました。');
+    }
 }
