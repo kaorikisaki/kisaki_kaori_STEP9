@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ログイン画面</title>
-    <!-- ⬇︎ここのアイコン指定をしっかり記述します -->
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -13,8 +12,9 @@
     <header class="w-full py-6 px-12 flex justify-between items-center">
         <span class="text-xl text-gray-800">Laravel</span>
         <div class="space-x-6 text-sm text-gray-600">
-            <a href="/login" class="hover:underline">Login</a>
-            <a href="/register" class="hover:underline">Register</a>
+            <!-- ルート名に変更 -->
+            <a href="{{ route('login') }}" class="hover:underline">Login</a>
+            <a href="{{ route('register') }}" class="hover:underline">Register</a>
         </div>
     </header>
 
@@ -38,10 +38,10 @@
                     </div>
                 @endif
 
-                <form action="/login" method="POST">
+                <!-- フォームのアクションも route() に変更する場合はここ（POST /login なのでそのままでもOKです） -->
+                <form action="{{ route('login') }}" method="POST">
                     @csrf
 
-                    <!-- 800px幅の中で綺麗に収まるよう max-w を少し広げて調整 -->
                     <div class="max-w-xl mx-auto">
                         <!-- Email Address -->
                         <div class="mb-5 flex items-center">

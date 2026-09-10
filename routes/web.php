@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\MypageController; 
+use App\Http\Controllers\ProductController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -29,3 +30,9 @@ Route::get('/mypage/edit', [MypageController::class, 'edit'])->middleware('auth'
 
 // アカウント情報の更新処理
 Route::patch('/mypage/update', [MypageController::class, 'update'])->middleware('auth')->name('mypage.update');
+
+// 例: 商品一覧画面の表示
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+
+// 既存の商品一覧ルートの下などに追記
+Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');

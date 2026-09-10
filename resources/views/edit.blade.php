@@ -62,7 +62,8 @@
 
             <!-- ボタンエリア -->
             <div class="flex items-center space-x-4">
-                <a href="{{ url('/mypage') }}" class="bg-gray-500 text-white text-sm px-4 py-2 rounded hover:bg-gray-600 transition">
+                <!-- url() を route() に変更して統一 -->
+                <a href="{{ route('mypage') }}" class="bg-gray-500 text-white text-sm px-4 py-2 rounded hover:bg-gray-600 transition">
                     戻る
                 </a>
                 <button type="submit" class="bg-blue-600 text-white text-sm px-4 py-2 rounded hover:bg-blue-700 transition">

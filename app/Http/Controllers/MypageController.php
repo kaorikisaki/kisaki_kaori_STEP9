@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Product; // 追加：Productモデルのインポート
+use App\Models\Product;
 
 class MypageController extends Controller
 {
@@ -29,6 +29,9 @@ class MypageController extends Controller
     public function edit()
     {
         $user = Auth::user();
+        
+        // ※もしビューファイル名もスネークケース/規約に合わせる場合は
+        // 'edit' を 'mypage_edit' などに変更するとより綺麗に統一できます。
         return view('edit', compact('user'));
     }
 
@@ -37,13 +40,14 @@ class MypageController extends Controller
      */
     public function update(Request $request)
     {
-        $validated = $request->validate([
+        // 複数単語の変数名にする場合はスネークケース（$validated_data など）にするのが規約に合致します
+        $validated_data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . Auth::id()],
         ]);
 
         $user = Auth::user();
-        $user->update($validated);
+        $user->update($validated_data);
 
         return redirect()->route('mypage')->with('success', 'アカウント情報を更新しました。');
     }

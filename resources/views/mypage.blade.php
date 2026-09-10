@@ -61,7 +61,8 @@
                                 <td class="py-4 px-4">{{ $product->description }}</td>
                                 <td class="py-4 px-4">{{ number_format($product->price) }}</td>
                                 <td class="py-4 px-4 text-right">
-                                    <a href="#" class="bg-emerald-600 text-white text-xs px-3 py-1 rounded hover:bg-emerald-700 transition">詳細</a>
+                                    <!-- 修正済み：各商品の詳細ページへ飛ぶリンク -->
+                                    <a href="{{ route('products.show', $product->id) }}" class="bg-emerald-600 text-white text-xs px-3 py-1 rounded hover:bg-emerald-700 transition">詳細</a>
                                 </td>
                             </tr>
                         @empty

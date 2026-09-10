@@ -12,8 +12,9 @@
     <header class="w-full py-6 px-12 flex justify-between items-center">
         <span class="text-xl text-gray-800">Laravel</span>
         <div class="space-x-6 text-sm text-gray-600">
-            <a href="/login" class="hover:underline">Login</a>
-            <a href="/register" class="hover:underline">Register</a>
+            <!-- ルート名に変更 -->
+            <a href="{{ route('login') }}" class="hover:underline">Login</a>
+            <a href="{{ route('register') }}" class="hover:underline">Register</a>
         </div>
     </header>
 
@@ -37,7 +38,8 @@
                     </div>
                 @endif
 
-                <form action="/register" method="POST">
+                <!-- フォームのアクションを route() に変更 -->
+                <form action="{{ route('register') }}" method="POST">
                     @csrf
 
                     <!-- 800px幅の中で綺麗に収まるよう調整 -->
@@ -57,12 +59,11 @@
                         </div>
 
                         <!-- 名前（カナ） -->
-                        <!-- 名前（カナ） -->
-        <div class="mb-5 flex items-center">
-            <label class="w-44 text-right pr-8 text-sm text-gray-700 flex-shrink-0" for="name_kana">名前（カナ）</label>
-            <input class="flex-1 px-3 py-2 border rounded text-sm focus:outline-none focus:ring focus:border-blue-300" 
-                    type="text" id="name_kana" name="name_kana" value="{{ old('name_kana') }}" required>
-        </div>
+                        <div class="mb-5 flex items-center">
+                            <label class="w-44 text-right pr-8 text-sm text-gray-700 flex-shrink-0" for="name_kana">名前（カナ）</label>
+                            <input class="flex-1 px-3 py-2 border rounded text-sm focus:outline-none focus:ring focus:border-blue-300" 
+                                    type="text" id="name_kana" name="name_kana" value="{{ old('name_kana') }}" required>
+                        </div>
 
                         <!-- Email Address -->
                         <div class="mb-5 flex items-center">
