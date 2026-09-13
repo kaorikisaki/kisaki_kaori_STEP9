@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>マイページ</title>
-    <!-- Tailwind CSSの読み込み -->
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-50 min-h-screen p-8">
-    <div class="max-w-5xl mx-auto bg-white p-8 rounded-lg shadow-sm">
+@extends('layouts.app')
+
+@section('title', 'マイページ')
+
+@section('content')
+    <div class="bg-white p-8 rounded-lg shadow-sm">
         
         <!-- タイトル -->
         <h1 class="text-2xl font-bold mb-6">マイページ</h1>
@@ -61,7 +56,6 @@
                                 <td class="py-4 px-4">{{ $product->description }}</td>
                                 <td class="py-4 px-4">{{ number_format($product->price) }}</td>
                                 <td class="py-4 px-4 text-right">
-                                    <!-- 修正済み：各商品の詳細ページへ飛ぶリンク -->
                                     <a href="{{ route('products.show', $product->id) }}" class="bg-emerald-600 text-white text-xs px-3 py-1 rounded hover:bg-emerald-700 transition">詳細</a>
                                 </td>
                             </tr>
@@ -114,5 +108,4 @@
         </div>
 
     </div>
-</body>
-</html>
+@endsection

@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\MypageController; 
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\LikeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -36,3 +37,9 @@ Route::get('/products', [ProductController::class, 'index'])->name('products.ind
 
 // 既存の商品一覧ルートの下などに追記
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+
+// お気に入り登録・解除
+Route::middleware('auth')->group(function () {
+    Route::post('/products/{product}/like', [LikeController::class, 'store'])->name('likes.store');
+    Route::delete('/products/{product}/like', [LikeController::class, 'destroy'])->name('likes.destroy');
+});

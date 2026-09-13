@@ -17,11 +17,6 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -30,11 +25,13 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * ユーザーが出品した商品とのリレーション
-     */
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
     }
 }

@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>アカウント編集画面</title>
-    <!-- Tailwind CSSの読み込み -->
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-50 min-h-screen p-8">
-    <div class="max-w-5xl mx-auto bg-white p-8 rounded-lg shadow-sm">
+@extends('layouts.app')
+
+@section('title', 'アカウント情報編集')
+
+@section('content')
+    <div class="bg-white p-8 rounded-lg shadow-sm">
         
         <!-- タイトル -->
         <h1 class="text-2xl font-bold mb-6">アカウント情報編集</h1>
@@ -62,7 +57,6 @@
 
             <!-- ボタンエリア -->
             <div class="flex items-center space-x-4">
-                <!-- url() を route() に変更して統一 -->
                 <a href="{{ route('mypage') }}" class="bg-gray-500 text-white text-sm px-4 py-2 rounded hover:bg-gray-600 transition">
                     戻る
                 </a>
@@ -73,5 +67,4 @@
         </form>
 
     </div>
-</body>
-</html>
+@endsection

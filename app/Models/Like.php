@@ -5,24 +5,28 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class Like extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'user_id',
-        'name',
-        'description',
-        'price',
+        'product_id',
     ];
 
+    /**
+     * いいねをしたユーザーを取得
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function likes()
+    /**
+     * いいねされた商品を取得
+     */
+    public function product()
     {
-        return $this->hasMany(Like::class);
+        return $this->belongsTo(Product::class);
     }
 }
