@@ -32,10 +32,17 @@ Route::get('/mypage/edit', [MypageController::class, 'edit'])->middleware('auth'
 // アカウント情報の更新処理
 Route::patch('/mypage/update', [MypageController::class, 'update'])->middleware('auth')->name('mypage.update');
 
-// 例: 商品一覧画面の表示
+// 商品一覧画面の表示
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 
-// 既存の商品一覧ルートの下などに追記
+// ★【重要】{id} よりも上に /products/create を配置する！
+// 商品新規登録画面の表示
+Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+
+// 商品の保存処理
+Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+
+// 商品詳細画面の表示
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
 
 // お気に入り登録・解除
