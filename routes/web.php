@@ -32,17 +32,26 @@ Route::get('/mypage/edit', [MypageController::class, 'edit'])->middleware('auth'
 // アカウント情報の更新処理
 Route::patch('/mypage/update', [MypageController::class, 'update'])->middleware('auth')->name('mypage.update');
 
-// 商品一覧画面の表示
+// --- 商品関連のルート ---
+// 一覧画面
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 
-// ★【重要】{id} よりも上に /products/create を配置する！
-// 商品新規登録画面の表示
+// 新規登録画面（※ {id} などの変数ルートより上にする必要があります）
 Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
 
-// 商品の保存処理
+// 編集画面
+Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
+
+// 保存処理
 Route::post('/products', [ProductController::class, 'store'])->name('products.store');
 
-// 商品詳細画面の表示
+// 更新処理
+Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
+
+// 削除処理
+Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+
+// 詳細画面（※ /products/create や /products/{product}/edit よりも下に置くのが鉄則です）
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
 
 // お気に入り登録・解除

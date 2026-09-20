@@ -47,10 +47,10 @@ class ProductController extends Controller
         return view('product_show', compact('product'));
     }
 
-   // 6. 商品新規登録画面の表示
+    // 6. 商品新規登録画面の表示
     public function create()
     {
-        return view('product_create'); // 'product_create' に変更する
+        return view('product_create');
     }
 
     // 7. 商品の保存処理
@@ -63,7 +63,7 @@ class ProductController extends Controller
             'description' => 'nullable',
         ]);
 
-        // データベースへ保存（ログイン中のユーザーIDも紐付ける場合）
+        // データベースへ保存
         Product::create([
             'name' => $request->name,
             'price' => $request->price,
@@ -72,5 +72,35 @@ class ProductController extends Controller
         ]);
 
         return redirect()->route('products.index')->with('success', '商品を登録しました！');
+    }
+
+    /**
+     * 8. 商品編集画面を表示する
+     */
+public function edit(Product $product)
+    {
+        return view('edit', compact('product'));
+    }
+
+    /**
+     * 9. 商品情報を更新する
+     */
+    public function update(Request $request, Product $product)
+    {
+        // バリデーション
+        $request->validate([
+            'name' => 'required|max:255',
+            'price' => 'required|integer|min:0',
+            'description' => 'nullable',
+        ]);
+
+        // データの更新
+        $product->update([
+            'name' => $request->name,
+            'price' => $request->price,
+            'description' => $request->description,
+        ]);
+
+        return redirect()->route('products.show', $product->id)->with('success', '商品を更新しました！');
     }
 }

@@ -3,60 +3,40 @@
 @section('title', '商品詳細')
 
 @section('content')
-    <h1 class="text-2xl font-bold mb-6">商品詳細</h1>
+    <h1 class="text-3xl font-bold mb-6">出品商品詳細</h1>
 
-    <div class="bg-white rounded shadow p-6">
+    <div class="bg-white rounded shadow p-6 max-w-2xl">
         <div class="mb-4">
-            <span class="text-sm text-gray-500">商品番号: {{ $product->id }}</span>
-            <h2 class="text-xl font-bold mt-1">{{ $product->name }}</h2>
-        </div>
-
-        <div class="mb<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>@yield('title', 'マイアプリ')</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="bg-gray-100 text-gray-900">
-
-    <!-- ここに共通のヘッダーなどを置いてもOK -->
-
-    <main class="container mx-auto p-6">
-        <!-- 各ページの中身がここに埋め込まれます -->
-        @yield('content')
-    </main>
-
-</body>
-</html>-4">
-            <img src="{{ asset('storage/' . $product->image) }}" alt="商品画像" class="w-48 h-48 object-cover rounded border">
+            <h2 class="text-xl font-bold mb-2">商品名：{{ $product->name }}</h2>
+            <p class="text-gray-700 whitespace-pre-wrap">説明：{{ $product->description }}</p>
         </div>
 
         <div class="mb-4">
-            <p class="text-gray-700 whitespace-pre-wrap">{{ $product->description }}</p>
+            <span class="block mb-2">画像：</span>
+            @if ($product->image)
+                <img src="{{ asset('storage/' . $product->image) }}" alt="商品画像" class="w-64 h-64 object-cover rounded border">
+            @else
+                <p class="text-gray-500">画像はありません</p>
+            @endif
         </div>
 
         <div class="mb-6">
-            <span class="text-lg font-bold text-blue-600">¥{{ number_format($product->price) }}</span>
+            <span class="text-xl font-bold">金額：¥{{ number_format($product->price) }}</span>
         </div>
 
-        <div class="flex items-center justify-between">
-            <a href="{{ route('products.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition">戻る</a>
+        <div class="flex items-center space-x-4">
+            <!-- 編集ボタン -->
+            <a href="{{ route('products.edit', $product) }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">編集</a>
 
-            @auth
-                @if ($product->likes->where('user_id', auth()->id())->isNotEmpty())
-                    <form action="{{ route('likes.destroy', $product) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition">お気に入り解除</button>
-                    </form>
-                @else
-                    <form action="{{ route('likes.store', $product) }}" method="POST">
-                        @csrf
-                        <button type="submit" class="bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-600 transition">お気に入り登録</button>
-                    </form>
-                @endif
-            @endauth
+            <!-- 削除ボタン -->
+            <form action="{{ route('products.destroy', $product) }}" method="POST" onsubmit="return confirm('本当に削除しますか？');">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="bg-red-700 text-white px-4 py-2 rounded hover:bg-red-800 transition">削除する</button>
+            </form>
+
+            <!-- 戻るボタン -->
+            <a href="{{ route('products.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition">戻る</a>
         </div>
     </div>
 @endsection

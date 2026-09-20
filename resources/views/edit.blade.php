@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'アカウント情報編集')
+@section('title', '出品商品編集')
 
 @section('content')
     <div class="bg-white p-8 rounded-lg shadow-sm">
         
         <!-- タイトル -->
-        <h1 class="text-2xl font-bold mb-6">アカウント情報編集</h1>
+        <h1 class="text-2xl font-bold mb-6">出品商品編集</h1>
 
         <!-- バリデーションエラー表示 -->
         @if ($errors->any())
@@ -27,37 +27,43 @@
         @endif
 
         <!-- 更新用フォーム -->
-        <form action="{{ route('mypage.update') }}" method="POST">
+        <form action="{{ route('products.update', $product->id) }}" method="POST">
             @csrf
-            @method('PATCH')
+            @method('PUT')
 
-            <!-- ユーザ名 -->
+            <!-- 商品名 -->
             <div class="mb-4">
-                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">ユーザ名</label>
-                <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">商品名</label>
+                <input type="text" id="name" name="name" value="{{ old('name', $product->name) }}" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
-            <!-- Eメール -->
+            <!-- 価格 -->
             <div class="mb-4">
-                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Eメール</label>
-                <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <label for="price" class="block text-sm font-medium text-gray-700 mb-1">価格</label>
+                <input type="number" id="price" name="price" value="{{ old('price', $product->price) }}" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
-            <!-- 名前（漢字など） -->
+            <!-- 商品説明 -->
             <div class="mb-4">
-                <label for="name_kanji" class="block text-sm font-medium text-gray-700 mb-1">名前</label>
-                <input type="text" id="name_kanji" name="name_kanji" value="{{ old('name_kanji', $user->name_kanji ?? '') }}" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <label for="description" class="block text-sm font-medium text-gray-700 mb-1">商品説明</label>
+                <textarea id="description" name="description" rows="4" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">{{ old('description', $product->description) }}</textarea>
             </div>
 
-            <!-- カナ -->
+            <!-- 在庫数 -->
+            <div class="mb-4">
+                <label for="stock" class="block text-sm font-medium text-gray-700 mb-1">在庫数</label>
+                <input type="number" id="stock" name="stock" value="{{ old('stock', $product->stock ?? '') }}" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <!-- 商品画像 -->
             <div class="mb-6">
-                <label for="name_kana" class="block text-sm font-medium text-gray-700 mb-1">カナ</label>
-                <input type="text" id="name_kana" name="name_kana" value="{{ old('name_kana', $user->name_kana ?? '') }}" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <label for="image" class="block text-sm font-medium text-gray-700 mb-1">商品画像</label>
+                <input type="file" id="image" name="image" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
             </div>
 
             <!-- ボタンエリア -->
             <div class="flex items-center space-x-4">
-                <a href="{{ route('mypage') }}" class="bg-gray-500 text-white text-sm px-4 py-2 rounded hover:bg-gray-600 transition">
+                <a href="{{ route('products.show', $product->id) }}" class="bg-gray-500 text-white text-sm px-4 py-2 rounded hover:bg-gray-600 transition">
                     戻る
                 </a>
                 <button type="submit" class="bg-blue-600 text-white text-sm px-4 py-2 rounded hover:bg-blue-700 transition">
