@@ -12,13 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('user_id')->constrained()->cascadeOnDelete(); // 追加
-        $table->string('name');          // 追加：商品名
-        $table->text('description');     // 追加：商品説明
-        $table->integer('price');        // 追加：料金
-        $table->timestamps();
-    });
+            $table->id();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->string('product_name');      // name から product_name に変更！
+            $table->text('description');         // 商品説明
+            $table->integer('price');            // 料金
+            $table->string('img_path')->nullable(); // 画像パス用のカラムを追加（エラー防止）
+            $table->timestamps();
+        });
     }
 
     /**

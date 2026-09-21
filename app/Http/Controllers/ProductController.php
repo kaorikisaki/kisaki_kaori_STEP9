@@ -13,27 +13,27 @@ class ProductController extends Controller
         // クエリの初期化
         $query = Product::query();
 
-        // 1. ログイン中のユーザー以外の商品に絞り込む
+        // ログイン中のユーザー以外の商品に絞り込む
         if (Auth::check()) {
             $query->where('user_id', '!=', Auth::id());
         }
 
-        // 2. キーワード検索（商品名）
+        // キーワード検索（product_nameに変更）
         if ($keyword = $request->input('keyword')) {
-            $query->where('name', 'like', '%' . $keyword . '%');
+            $query->where('product_name', 'like', '%' . $keyword . '%');
         }
 
-        // 3. 最低価格の絞り込み
+        // 最低価格の絞り込み
         if ($min_price = $request->input('min_price')) {
             $query->where('price', '>=', $min_price);
         }
 
-        // 4. 最高価格の絞り込み
+        // 最高価格の絞り込み
         if ($max_price = $request->input('max_price')) {
             $query->where('price', '<=', $max_price);
         }
 
-        // 5. 商品番号の昇順で並び替えて取得
+        // 商品番号の昇順で並び替えて取得
         $products = $query->orderBy('id', 'asc')->get();
 
         return view('product_index', compact('products'));
@@ -47,60 +47,98 @@ class ProductController extends Controller
         return view('product_show', compact('product'));
     }
 
-    // 6. 商品新規登録画面の表示
+    // 商品新規登録画面の表示
     public function create()
     {
         return view('product_create');
     }
 
-    // 7. 商品の保存処理
+    // 商品の保存処理
     public function store(Request $request)
     {
-        // バリデーション（入力チェック）
+        // バリデーション（入力チェック）- product_nameに変更
         $request->validate([
-            'name' => 'required|max:255',
+            'product_name' => 'required|max:255',
             'price' => 'required|integer|min:0',
+            'stock' => 'required|integer|min:0', // 在庫数もバリデーションに含めると安心です
             'description' => 'nullable',
+            // 'img_path' => 'nullable|image|max:2048', // 画像を使う場合は追加
         ]);
 
-        // データベースへ保存
+        // データベースへ保存（product_nameに変更）
         Product::create([
-            'name' => $request->name,
+            'product_name' => $request->product_name,
             'price' => $request->price,
+            'stock' => $request->input('stock', 0),
             'description' => $request->description,
             'user_id' => Auth::id(), // ログインしていればユーザーIDも保存
+            // 'img_path' => $path, // 画像保存処理の実装に合わせて調整
         ]);
 
         return redirect()->route('products.index')->with('success', '商品を登録しました！');
     }
 
     /**
-     * 8. 商品編集画面を表示する
+     * 商品編集画面を表示する
      */
-public function edit(Product $product)
+    public function edit(Product $product)
     {
         return view('edit', compact('product'));
     }
 
     /**
-     * 9. 商品情報を更新する
+     * 商品情報を更新する
      */
     public function update(Request $request, Product $product)
     {
-        // バリデーション
+        // バリデーション - product_nameに変更
         $request->validate([
-            'name' => 'required|max:255',
+            'product_name' => 'required|max:255',
             'price' => 'required|integer|min:0',
+            'stock' => 'required|integer|min:0',
             'description' => 'nullable',
         ]);
 
-        // データの更新
+        // データの更新 - product_nameに変更
         $product->update([
-            'name' => $request->name,
+            'product_name' => $request->product_name,
             'price' => $request->price,
+            'stock' => $request->stock,
             'description' => $request->description,
         ]);
 
         return redirect()->route('products.show', $product->id)->with('success', '商品を更新しました！');
+    }
+
+    /**
+     * 商品購入画面を表示する
+     */
+    public function purchase(Product $product)
+    {
+        return view('product_purchase', compact('product'));
+    }
+
+    /**
+     * 購入処理を実行する（在庫の減算 & 購入履歴の保存）
+     */
+    public function buy(Request $request, Product $product)
+    {
+        // バリデーション（入力された数量が在庫数を超えていないかなど）
+        $request->validate([
+            'quantity' => 'required|integer|min:1|max:' . $product->stock,
+        ]);
+
+        // sales テーブルに購入履歴を保存
+        \App\Models\Sale::create([
+            'user_id' => Auth::id(),
+            'product_id' => $product->id,
+            'quantity' => $request->quantity,
+        ]);
+
+        // products テーブルの在庫数（stock）を減らす
+        $product->stock -= $request->quantity;
+        $product->save();
+
+        return redirect()->route('products.index')->with('success', '商品を購入しました！');
     }
 }

@@ -32,7 +32,7 @@
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-lg font-bold">&lt;出品商品&gt;</h2>
                 <!-- 新規登録ボタン -->
-                <a href="#" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded hover:bg-blue-700 transition">
+                <a href="{{ route('products.create') }}" class="bg-blue-600 text-white text-xs px-3 py-1.5 rounded hover:bg-blue-700 transition">
                     新規登録
                 </a>
             </div>
@@ -52,7 +52,7 @@
                         @forelse($products as $product)
                             <tr>
                                 <td class="py-4 px-4">{{ $product->id }}</td>
-                                <td class="py-4 px-4">{{ $product->name }}</td>
+                                <td class="py-4 px-4">{{ $product->product_name }}</td>
                                 <td class="py-4 px-4">{{ $product->description }}</td>
                                 <td class="py-4 px-4">{{ number_format($product->price) }}</td>
                                 <td class="py-4 px-4 text-right">

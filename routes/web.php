@@ -59,3 +59,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/products/{product}/like', [LikeController::class, 'store'])->name('likes.store');
     Route::delete('/products/{product}/like', [LikeController::class, 'destroy'])->name('likes.destroy');
 });
+
+// --- 商品購入関連のルート ---
+// 購入画面の表示
+Route::get('/products/{product}/purchase', [ProductController::class, 'purchase'])->middleware('auth')->name('products.purchase');
+
+// 購入処理の実行
+Route::post('/products/{product}/purchase', [ProductController::class, 'buy'])->middleware('auth')->name('products.buy');

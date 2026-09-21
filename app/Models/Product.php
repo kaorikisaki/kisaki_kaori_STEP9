@@ -11,9 +11,11 @@ class Product extends Model
 
     protected $fillable = [
         'user_id',
-        'name',
+        'product_name', // name から product_name に変更
         'description',
         'price',
+        'img_path',     // 追加
+        'stock',        // 追加
     ];
 
     public function user()

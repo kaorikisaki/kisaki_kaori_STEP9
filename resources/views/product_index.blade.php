@@ -33,10 +33,12 @@
                 @forelse($products as $product)
                 <tr>
                     <td class="py-3 px-4">{{ $product->id }}</td>
-                    <td class="py-3 px-4">{{ $product->name }}</td>
+                    <!-- name から product_name に変更 -->
+                    <td class="py-3 px-4">{{ $product->product_name }}</td>
                     <td class="py-3 px-4">{{ $product->description }}</td>
                     <td class="py-3 px-4">
-                        <img src="{{ asset('storage/' . $product->image) }}" alt="商品画像" class="w-12 h-12 object-cover">
+                        <!-- image から img_path に変更 -->
+                        <img src="{{ asset('storage/' . $product->img_path) }}" alt="商品画像" class="w-12 h-12 object-cover">
                     </td>
                     <td class="py-3 px-4">{{ number_format($product->price) }}</td>
                     <td class="py-3 px-4">

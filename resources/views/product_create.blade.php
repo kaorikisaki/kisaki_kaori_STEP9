@@ -26,8 +26,9 @@
             @csrf
 
             <div>
-                <label for="name" class="block text-sm font-medium mb-1">商品名</label>
-                <input type="text" id="name" name="name" value="{{ old('name') }}" class="w-full border border-gray-300 rounded px-3 py-2 bg-white" required>
+                <!-- name から product_name に変更 -->
+                <label for="product_name" class="block text-sm font-medium mb-1">商品名</label>
+                <input type="text" id="product_name" name="product_name" value="{{ old('product_name') }}" class="w-full border border-gray-300 rounded px-3 py-2 bg-white" required>
             </div>
 
             <div>
@@ -46,8 +47,9 @@
             </div>
 
             <div class="flex items-center gap-4">
-                <label for="image" class="text-sm font-medium">商品画像</label>
-                <input type="file" id="image" name="image" class="text-sm text-gray-500 file:mr-4 file:py-1.5 file:px-4 file:rounded file:border file:border-gray-300 file:text-sm file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100">
+                <!-- image から img_path に変更 -->
+                <label for="img_path" class="text-sm font-medium">商品画像</label>
+                <input type="file" id="img_path" name="img_path" class="text-sm text-gray-500 file:mr-4 file:py-1.5 file:px-4 file:rounded file:border file:border-gray-300 file:text-sm file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100">
             </div>
 
             <div class="flex items-center gap-3 pt-4">

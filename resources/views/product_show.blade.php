@@ -7,14 +7,16 @@
 
     <div class="bg-white rounded shadow p-6 max-w-2xl">
         <div class="mb-4">
-            <h2 class="text-xl font-bold mb-2">商品名：{{ $product->name }}</h2>
+            <!-- name から product_name に変更 -->
+            <h2 class="text-xl font-bold mb-2">商品名：{{ $product->product_name }}</h2>
             <p class="text-gray-700 whitespace-pre-wrap">説明：{{ $product->description }}</p>
         </div>
 
         <div class="mb-4">
             <span class="block mb-2">画像：</span>
-            @if ($product->image)
-                <img src="{{ asset('storage/' . $product->image) }}" alt="商品画像" class="w-64 h-64 object-cover rounded border">
+            <!-- image から img_path に変更 -->
+            @if ($product->img_path)
+                <img src="{{ asset('storage/' . $product->img_path) }}" alt="商品画像" class="w-64 h-64 object-cover rounded border">
             @else
                 <p class="text-gray-500">画像はありません</p>
             @endif
