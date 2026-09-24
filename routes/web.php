@@ -11,6 +11,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/home', function () {
+    return redirect()->route('products.index');
+});
+
 // ログイン画面の表示
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 

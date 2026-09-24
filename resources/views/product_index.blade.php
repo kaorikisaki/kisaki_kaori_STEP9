@@ -5,6 +5,13 @@
 @section('content')
     <h1 class="text-2xl font-bold mb-6">商品一覧</h1>
 
+    {{-- 購入成功時のメッセージ表示 --}}
+    @if (session('success'))
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6" role="alert">
+            <span class="block sm:inline">{{ session('success') }}</span>
+        </div>
+    @endif
+
     <form action="{{ route('products.index') }}" method="GET" class="mb-6 inline-flex items-center gap-4">
         <input type="text" name="keyword" placeholder="商品名を入力" value="{{ request('keyword') }}" class="border border-gray-300 rounded px-3 py-2 w-72">
         
@@ -33,16 +40,20 @@
                 @forelse($products as $product)
                 <tr>
                     <td class="py-3 px-4">{{ $product->id }}</td>
-                    <!-- name から product_name に変更 -->
                     <td class="py-3 px-4">{{ $product->product_name }}</td>
                     <td class="py-3 px-4">{{ $product->description }}</td>
                     <td class="py-3 px-4">
-                        <!-- image から img_path に変更 -->
                         <img src="{{ asset('storage/' . $product->img_path) }}" alt="商品画像" class="w-12 h-12 object-cover">
                     </td>
                     <td class="py-3 px-4">{{ number_format($product->price) }}</td>
                     <td class="py-3 px-4">
-                        <a href="{{ route('products.show', $product->id) }}" class="bg-emerald-600 text-white px-4 py-1.5 rounded text-sm hover:bg-emerald-700 transition">詳細</a>
+                        @if(Auth::check() && $product->user_id === Auth::id())
+                            {{-- 自分の出品した商品の場合は、詳細/編集画面へ --}}
+                            <a href="{{ route('products.show', $product->id) }}" class="bg-emerald-600 text-white px-4 py-1.5 rounded text-sm hover:bg-emerald-700 transition">詳細</a>
+                        @else
+                            {{-- 他人の商品の場合は、購入画面へ --}}
+                            <a href="{{ route('products.purchase', $product->id) }}" class="bg-blue-600 text-white px-4 py-1.5 rounded text-sm hover:bg-blue-700 transition">購入画面へ</a>
+                        @endif
                     </td>
                 </tr>
                 @empty
