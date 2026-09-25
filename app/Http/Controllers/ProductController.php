@@ -6,20 +6,19 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Sale;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\ProductRequest; // 提出条件のFormRequestをインポート
 
 class ProductController extends Controller
 {
+    /**
+     * 商品一覧表示（検索・価格絞り込み・ログインユーザー以外・昇順）
+     */
     public function index(Request $request)
     {
-        // クエリの初期化
-        $query = Product::query();
-
         // ログイン中のユーザー以外の商品に絞り込む
-        if (Auth::check()) {
-            $query->where('user_id', '!=', Auth::id());
-        }
+        $query = Product::where('user_id', '!=', Auth::id());
 
-        // キーワード検索（product_nameに変更）
+        // キーワード検索
         if ($keyword = $request->input('keyword')) {
             $query->where('product_name', 'like', '%' . $keyword . '%');
         }
@@ -34,73 +33,71 @@ class ProductController extends Controller
             $query->where('price', '<=', $max_price);
         }
 
-        // 商品番号の昇順で並び替えて取得
+        // 商品番号（id）の昇順で取得
         $products = $query->orderBy('id', 'asc')->get();
 
         return view('product_index', compact('products'));
     }
 
-    public function show($id)
-    {
-        // 指定されたIDの商品を取得（見つからない場合は404エラー）
-        $product = Product::findOrFail($id);
-
-        return view('product_show', compact('product'));
-    }
-
-    // 商品新規登録画面の表示
+    /**
+     * 新規登録画面
+     */
     public function create()
     {
         return view('product_create');
     }
 
-    // 商品の保存処理
-    public function store(Request $request)
+    /**
+     * 新規登録処理（FormRequestを使用）
+     */
+    public function store(ProductRequest $request)
     {
-        // バリデーション（入力チェック）- product_nameに変更
-        $request->validate([
-            'product_name' => 'required|max:255',
-            'price' => 'required|integer|min:0',
-            'stock' => 'required|integer|min:0', // 在庫数もバリデーションに含めると安心です
-            'description' => 'nullable',
-            // 'img_path' => 'nullable|image|max:2048', // 画像を使う場合は追加
-        ]);
-
-        // データベースへ保存（product_nameに変更）
         Product::create([
+            'user_id' => Auth::id(),
             'product_name' => $request->product_name,
             'price' => $request->price,
-            'stock' => $request->input('stock', 0),
+            'stock' => $request->stock,
             'description' => $request->description,
-            'user_id' => Auth::id(), // ログインしていればユーザーIDも保存
-            // 'img_path' => $path, // 画像保存処理の実装に合わせて調整
         ]);
 
         return redirect()->route('products.index')->with('success', '商品を登録しました！');
     }
 
     /**
-     * 商品編集画面を表示する
+     * 商品詳細表示
      */
-    public function edit(Product $product)
+    public function show($id)
     {
+        $product = Product::findOrFail($id);
+        return view('product_show', compact('product'));
+    }
+
+    /**
+     * 編集画面
+     */
+    public function edit($id)
+    {
+        $product = Product::findOrFail($id);
+        
+        // 自分の出品物でなければ一覧に戻す
+        if ($product->user_id !== Auth::id()) {
+            return redirect()->route('products.index');
+        }
+
         return view('edit', compact('product'));
     }
 
     /**
-     * 商品情報を更新する
+     * 更新処理（FormRequestを使用）
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductRequest $request, $id)
     {
-        // バリデーション - product_nameに変更
-        $request->validate([
-            'product_name' => 'required|max:255',
-            'price' => 'required|integer|min:0',
-            'stock' => 'required|integer|min:0',
-            'description' => 'nullable',
-        ]);
+        $product = Product::findOrFail($id);
 
-        // データの更新 - product_nameに変更
+        if ($product->user_id !== Auth::id()) {
+            return redirect()->route('products.index');
+        }
+
         $product->update([
             'product_name' => $request->product_name,
             'price' => $request->price,
@@ -108,38 +105,56 @@ class ProductController extends Controller
             'description' => $request->description,
         ]);
 
-        return redirect()->route('products.show', $product->id)->with('success', '商品を更新しました！');
+        return redirect()->route('products.index')->with('success', '商品を更新しました！');
     }
 
     /**
-     * 商品購入画面を表示する
+     * 削除処理
      */
-    public function purchase(Product $product)
+    public function destroy($id)
     {
-        return view('product_purchase', compact('product'));
+        $product = Product::findOrFail($id);
+
+        if ($product->user_id === Auth::id()) {
+            $product->delete();
+        }
+
+        return redirect()->route('products.index')->with('success', '商品を削除しました！');
     }
 
     /**
-     * 購入処理を実行する（在庫の減算 & 購入履歴の保存）
+     * 購入画面の表示（GET用：必要に応じて実装）
      */
-    public function buy(Request $request, Product $product)
+    public function purchase(Request $request, $id)
     {
-        // バリデーション（入力された数量が在庫数を超えていないかなど）
+        $product = Product::findOrFail($id);
+        return view('product_purchase', compact('product')); // ビューがある場合
+    }
+
+    /**
+     * 購入処理の実行（POST用：ルーティングの 'buy' に合わせる）
+     */
+    public function buy(Request $request, $id)
+    {
+        $product = Product::findOrFail($id);
+
         $request->validate([
             'quantity' => 'required|integer|min:1|max:' . $product->stock,
         ]);
 
-        // sales テーブルに購入履歴を保存
-        \App\Models\Sale::create([
-            'user_id' => Auth::id(),
-            'product_id' => $product->id,
-            'quantity' => $request->quantity,
-        ]);
+        $quantity = $request->input('quantity');
 
-        // products テーブルの在庫数（stock）を減らす
-        $product->stock -= $request->quantity;
+        // 在庫数を減らす
+        $product->stock -= $quantity;
         $product->save();
 
-        return redirect()->route('products.index')->with('success', '商品を購入しました！');
+        // 購入履歴（sales）を保存
+        Sale::create([
+            'user_id' => Auth::id(),
+            'product_id' => $product->id,
+            'quantity' => $quantity,
+        ]);
+
+        return redirect()->route('products.index')->with('success', '購入が完了しました！');
     }
 }

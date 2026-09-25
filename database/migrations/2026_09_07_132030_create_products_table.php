@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->string('product_name');      // name から product_name に変更！
+            $table->string('product_name');      // 商品名
             $table->text('description');         // 商品説明
             $table->integer('price');            // 料金
-            $table->string('img_path')->nullable(); // 画像パス用のカラムを追加（エラー防止）
+            $table->integer('stock')->default(0); // ★ ここに在庫数カラムを追加！
+            $table->string('img_path')->nullable(); // 画像パス用のカラム
             $table->timestamps();
         });
     }

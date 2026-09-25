@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\MypageController; 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\ContactController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -70,3 +71,7 @@ Route::get('/products/{product}/purchase', [ProductController::class, 'purchase'
 
 // 購入処理の実行
 Route::post('/products/{product}/purchase', [ProductController::class, 'buy'])->middleware('auth')->name('products.buy');
+
+// --- お問い合わせ関連のルート ---
+Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');

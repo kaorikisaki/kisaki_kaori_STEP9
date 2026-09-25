@@ -26,12 +26,12 @@
             </div>
         @endif
 
-        <!-- 更新用フォーム（画像のアップロードに対応するため enctype を追加） -->
+        <!-- 更新用フォーム -->
         <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
-            <!-- 商品名 (name から product_name に変更) -->
+            <!-- 商品名 -->
             <div class="mb-4">
                 <label for="product_name" class="block text-sm font-medium text-gray-700 mb-1">商品名</label>
                 <input type="text" id="product_name" name="product_name" value="{{ old('product_name', $product->product_name) }}" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -55,7 +55,7 @@
                 <input type="number" id="stock" name="stock" value="{{ old('stock', $product->stock ?? '') }}" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
-            <!-- 商品画像 (image から img_path に変更) -->
+            <!-- 商品画像 -->
             <div class="mb-6">
                 <label for="img_path" class="block text-sm font-medium text-gray-700 mb-1">商品画像</label>
                 <input type="file" id="img_path" name="img_path" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
