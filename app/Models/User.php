@@ -17,6 +17,20 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    protected $fillable = [
+        'name',
+        'name_kanji',
+        'name_kana',
+        'email',
+        'password',
+        'company_id',
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
     protected function casts(): array
     {
         return [
@@ -24,7 +38,8 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
+    
+    // リレーション等はそのまま
     public function products()
     {
         return $this->hasMany(Product::class);

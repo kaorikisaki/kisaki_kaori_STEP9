@@ -15,8 +15,8 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        // ログイン中のユーザー以外の商品に絞り込む
-        $query = Product::where('user_id', '!=', Auth::id());
+        // ログイン中のユーザー以外の商品に絞り込み、会社情報も一緒に取得
+        $query = Product::with('company')->where('user_id', '!=', Auth::id());
 
         // キーワード検索
         if ($keyword = $request->input('keyword')) {
@@ -52,12 +52,15 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
+        // テーブル定義書の company_id 必須要件に対応するため、ログインユーザーの company_id を紐付け[cite: 1, 2]
         Product::create([
             'user_id' => Auth::id(),
+            'company_id' => Auth::user()->company_id ?? 1, // ユーザーに紐づく会社ID（存在しない場合のフォールバックとして1を指定）
             'product_name' => $request->product_name,
             'price' => $request->price,
             'stock' => $request->stock,
             'description' => $request->description,
+            'img_path' => $request->img_path ?? 'default.jpg', // 必要に応じて画像パスの保存処理
         ]);
 
         return redirect()->route('products.index')->with('success', '商品を登録しました！');
@@ -68,7 +71,8 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::findOrFail($id);
+        // 画面定義書の会社名表示に対応するため company リレーションも一緒に取得[cite: 6]
+        $product = Product::with('company', 'user')->findOrFail($id);
         return view('product_show', compact('product'));
     }
 
@@ -127,8 +131,8 @@ class ProductController extends Controller
      */
     public function purchase(Request $request, $id)
     {
-        $product = Product::findOrFail($id);
-        return view('product_purchase', compact('product')); // ビューがある場合
+        $product = Product::with('company')->findOrFail($id);
+        return view('product_purchase', compact('product'));
     }
 
     /**

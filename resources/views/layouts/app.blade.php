@@ -20,7 +20,12 @@
             <div class="flex items-center gap-6 text-sm">
                 <a href="{{ route('products.index') }}" class="text-blue-600 hover:underline">Home</a>
                 <a href="{{ route('mypage') }}" class="text-blue-600 hover:underline">マイページ</a>
-                <span>ログインユーザー: TTUU</span>
+                
+                {{-- ログインしているユーザー名を表示 --}}
+                @auth
+                    <span>ログインユーザー: {{ Auth::user()->name }}</span>
+                @endauth
+
                 <a href="#" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition inline-block">
                     ログアウト
                 </a>

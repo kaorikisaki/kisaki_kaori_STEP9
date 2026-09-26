@@ -17,13 +17,13 @@
         </div>
     @endif
 
-    {{-- 商品名と説明（name から product_name に変更） --}}
+    {{-- 商品名と説明 --}}
     <div class="mb-4 space-y-1">
         <p class="text-lg text-gray-800">商品名：{{ $product->product_name }}</p>
         <p class="text-lg text-gray-600">説明：{{ $product->description }}</p>
     </div>
 
-    {{-- 商品画像（image から img_path に変更） --}}
+    {{-- 商品画像 --}}
     <div class="mb-6">
         <span class="block mb-2 text-gray-700">画像：</span>
         @if ($product->img_path)
@@ -44,7 +44,8 @@
         <div class="mb-6 space-y-2">
             <p class="text-lg text-gray-800">金額：¥{{ number_format($product->price) }}</p>
             <p class="text-lg text-gray-800">残り：{{ $product->stock ?? '' }}</p>
-            <p class="text-lg text-gray-800">会社：{{ $product->company ?? 'TNG' }}</p>
+            {{-- 会社名を正しくプロパティから取得するように修正 --}}
+            <p class="text-lg text-gray-800">会社：{{ $product->company->company_name ?? '未設定' }}</p>
         </div>
 
         <div class="flex items-center gap-4">

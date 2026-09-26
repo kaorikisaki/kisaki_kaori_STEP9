@@ -47,13 +47,8 @@
                     </td>
                     <td class="py-3 px-4">{{ number_format($product->price) }}</td>
                     <td class="py-3 px-4">
-                        @if(Auth::check() && $product->user_id === Auth::id())
-                            {{-- 自分の出品した商品の場合は、詳細/編集画面へ --}}
-                            <a href="{{ route('products.show', $product->id) }}" class="bg-emerald-600 text-white px-4 py-1.5 rounded text-sm hover:bg-emerald-700 transition">詳細</a>
-                        @else
-                            {{-- 他人の商品の場合は、購入画面へ --}}
-                            <a href="{{ route('products.purchase', $product->id) }}" class="bg-blue-600 text-white px-4 py-1.5 rounded text-sm hover:bg-blue-700 transition">購入画面へ</a>
-                        @endif
+                        {{-- 全ての商品に対して「詳細」ボタンを表示する仕様に変更 --}}
+                        <a href="{{ route('products.show', $product->id) }}" class="bg-emerald-600 text-white px-4 py-1.5 rounded text-sm hover:bg-emerald-700 transition">詳細</a>
                     </td>
                 </tr>
                 @empty

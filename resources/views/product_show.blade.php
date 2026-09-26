@@ -29,7 +29,15 @@
         <div class="mb-6">
             <span class="text-xl font-bold">金額：¥{{ number_format($product->price) }}</span>
             <p class="text-sm text-gray-600 mt-1">在庫数：{{ $product->stock }}</p>
+            <p class="text-sm text-gray-700 mt-1">会社：{{ $product->company->company_name ?? '未設定' }}</p>
         </div>
+
+        {{-- 教材に合わせたハートマークの表示（他人の商品の場合） --}}
+        @if ($product->user_id !== Auth::id())
+            <div class="mb-6">
+                <span class="text-2xl cursor-pointer">❤️</span>
+            </div>
+        @endif
 
         <div class="flex items-center space-x-4">
             {{-- ログインユーザーが「出品者」の場合：編集・削除ボタンを表示 --}}
@@ -44,13 +52,9 @@
                     <button type="submit" class="bg-red-700 text-white px-4 py-2 rounded hover:bg-red-800 transition">削除する</button>
                 </form>
             
-            {{-- ログインユーザーが「他人（購入者）」の場合：購入フォームとボタンを表示 --}}
+            {{-- ログインユーザーが「他人（購入者）」の場合：カートに追加するボタンを表示 --}}
             @else
-                <form action="{{ route('products.buy', $product->id) }}" method="POST" class="flex items-center space-x-2">
-                    @csrf
-                    <input type="number" name="quantity" value="1" min="1" max="{{ $product->stock }}" class="border rounded px-2 py-1 w-20">
-                    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">購入する</button>
-                </form>
+                <a href="{{ route('products.purchase', $product->id) }}" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition font-semibold">カートに追加する</a>
             @endif
 
             <!-- 戻るボタン -->

@@ -11,20 +11,43 @@ class Product extends Model
 
     protected $fillable = [
         'user_id',
-        'product_name', // name から product_name に変更
+        'company_id', 
+        'product_name',
         'description',
         'price',
-        'img_path',     // 追加
-        'stock',        // 追加
+        'img_path',
+        'stock',
     ];
 
+    /**
+     * 出品したユーザーを取得
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * 属している会社を取得（★追加）
+     */
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    /**
+     * いいね一覧を取得
+     */
     public function likes()
     {
         return $this->hasMany(Like::class);
+    }
+
+    /**
+     * 購入履歴一覧を取得
+     */
+    public function sales()
+    {
+        return $this->hasMany(Sale::class);
     }
 }

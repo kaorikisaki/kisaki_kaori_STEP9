@@ -84,19 +84,19 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
-                        <!-- ダミーデータ -->
-                        <tr>
-                            <td class="py-4 px-4">鉛筆</td>
-                            <td class="py-4 px-4">描きやすい鉛筆です</td>
-                            <td class="py-4 px-4">200</td>
-                            <td class="py-4 px-4">10</td>
-                        </tr>
-                        <tr>
-                            <td class="py-4 px-4">イヤホン</td>
-                            <td class="py-4 px-4">ワイヤレスです。</td>
-                            <td class="py-4 px-4">1000</td>
-                            <td class="py-4 px-4">1</td>
-                        </tr>
+                        {{-- コントローラーから渡される購入履歴（sales）をループ処理 --}}
+                        @forelse($sales ?? [] as $sale)
+                            <tr>
+                                <td class="py-4 px-4">{{ $sale->product->product_name ?? '不明な商品' }}</td>
+                                <td class="py-4 px-4">{{ $sale->product->description ?? '' }}</td>
+                                <td class="py-4 px-4">{{ number_format($sale->product->price ?? 0) }}</td>
+                                <td class="py-4 px-4">{{ $sale->quantity }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="py-4 px-4 text-center text-gray-500">購入した商品はありません。</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
